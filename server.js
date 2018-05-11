@@ -8,7 +8,7 @@ var myId
 console.log('starting')
 
 //connecting to ably
-var ably = new Ably.Realtime({ authUrl: '/auth' });
+var ably = new Ably.Realtime({ authUrl: '/auth', log:{level: 4} });
 ably.connection.once('connected', function () {
     myId = ably.auth.tokenDetails.clientId;
     console.log(`My id is ${myId}`)
@@ -40,11 +40,12 @@ function startApp(userId) {
         var latestRotation = camera.getAttribute('rotation');
         currentUser.attr = {
             position: latestPosition,
-            rotation: latestRotation
+            rotation: latestRotation,
+            color: "#373737"
         }
         VRchannel.publish('attr-change', currentUser)
     };
-    setInterval(networkTick, 1000);
+    setInterval(networkTick, 100);
     VRchannel.presence.get(function (err, members) {
         for (var i in members) {
             console.log(`Member id ${members[i].clientId}`)
